@@ -12,7 +12,10 @@ import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
+
+    private val LOGIN_RECEIVER_FILTER = "LOGIN_RECEIVER_FILTER"
+
     private lateinit var broadCastReceiver: BroadcastReceiver
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             val user = userEB.text.toString()
             val pass = passEB.text.toString()
 
-            performLoginViaService(user,pass)
+            performLoginViaService(user, pass)
         }
     }
 
@@ -30,19 +33,28 @@ class MainActivity : AppCompatActivity() {
 
         broadCastReceiver = object : BroadcastReceiver() {
             override fun onReceive(contxt: Context?, intent: Intent?) {
-               unregisterReceiver(this)
+                unregisterReceiver(this)
 
-                val loginResponse = LoginResponse(intent)
-                
-                handleLoginResponse(loginResponse)
+                val response = LoginResponse.getLoginResponse(intent!!)
+                handleLoginResponse(response)
             }
         }
         registerReceiver(broadCastReceiver, IntentFilter(LOGIN_RECEIVER_FILTER))
-        LoginService.performAsyncLogin(this,LOGIN_RECEIVER_FILTER, user,pass)
+        LoginService.performAsyncLogin(this, LOGIN_RECEIVER_FILTER, user, pass)
     }
 
     @VisibleForTesting
     private fun handleLoginResponse(response: LoginResponse) {
-        Log.d("Handling response","resp: $response")
+        Log.d("Handling response", "resp: $response")
+        if (response.isLoggedIn) {
+            Log.d("LoginResponse", "User logged in successfully")
+        } else {
+            Log.d("LoginResponse", "User logged in successfully")
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(broadCastReceiver)
     }
 }
