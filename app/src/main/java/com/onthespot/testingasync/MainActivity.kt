@@ -27,6 +27,15 @@ open class MainActivity : AppCompatActivity() {
 
             performLoginViaService(user, pass)
         }
+
+        println("init")
+        Thread().run{
+            println("Thread on ${Thread.currentThread().name}")
+        }
+
+        run{
+            println("Thread on ${Thread.currentThread().name}")
+        }
     }
 
     private fun performLoginViaService(user: String, pass: String) {

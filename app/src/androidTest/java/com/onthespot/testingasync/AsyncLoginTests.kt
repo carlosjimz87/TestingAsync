@@ -6,7 +6,6 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 
 import org.junit.Test
@@ -14,8 +13,6 @@ import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import org.junit.Rule
-import java.util.Objects
-import kotlin.math.log
 
 
 /**
@@ -24,9 +21,9 @@ import kotlin.math.log
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class TestAsyncLogin {
+class AsyncLoginTests {
 
-    private val TAG: String? = TestAsyncLogin::class.java.simpleName
+    private val TAG: String? = AsyncLoginTests::class.java.simpleName
 
     @Rule
     var mActivityRule = ActivityScenarioRule(MainActivityTest::class.java)
