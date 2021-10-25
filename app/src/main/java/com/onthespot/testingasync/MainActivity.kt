@@ -10,7 +10,10 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.MutableLiveData
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.Thread.sleep
+import java.util.*
 
 open class MainActivity : AppCompatActivity() {
 
@@ -28,14 +31,22 @@ open class MainActivity : AppCompatActivity() {
             performLoginViaService(user, pass)
         }
 
-        println("init")
-        Thread().run{
-            println("Thread on ${Thread.currentThread().name}")
+        val threadName:MutableLiveData<String> = MutableLiveData("")
+
+        run {
+            threadName.value = "Thread " + Thread.currentThread().name
+            println("Thread "+Thread.currentThread().name)
         }
 
-        run{
-            println("Thread on ${Thread.currentThread().name}")
+        Runnable {
+            threadName.value = "Runnable " + Thread.currentThread().name
+            sleep(3000)
         }
+
+        threadName.observe(this) { value ->
+            println("Received $value")
+        }
+
     }
 
     private fun performLoginViaService(user: String, pass: String) {
